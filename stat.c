@@ -1247,8 +1247,8 @@ static void show_thread_status_normal(struct thread_stat *ts,
 			(unsigned long long) ts->minf);
 
 	stat_calc_dist(ts->io_u_map, ddir_rw_sum(ts->total_io_u), io_u_dist);
-	log_buf(out, "  IO depths    : 1=%3.1f%%, 2=%3.1f%%, 4=%3.1f%%, 8=%3.1f%%,"
-		 " 16=%3.1f%%, 32=%3.1f%%, >=64=%3.1f%%\n", io_u_dist[0],
+	log_buf(out, "  IO depths    : 1...8=%3.1f%%, 9...32=%3.1f%%, 33...64=%3.1f%%, 65...128=%3.1f%%,"
+		 " 129...256=%3.1f%%, 257...512=%3.1f%%, >=513=%3.1f%%\n", io_u_dist[0],
 					io_u_dist[1], io_u_dist[2],
 					io_u_dist[3], io_u_dist[4],
 					io_u_dist[5], io_u_dist[6]);

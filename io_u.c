@@ -1140,22 +1140,22 @@ void io_u_mark_depth(struct thread_data *td, unsigned int nr)
 	default:
 		idx = 6;
 		break;
-	case 32 ... 63:
+	case 257 ... 512:
 		idx = 5;
 		break;
-	case 16 ... 31:
+	case 129 ... 256:
 		idx = 4;
 		break;
-	case 8 ... 15:
+	case 65 ... 128:
 		idx = 3;
 		break;
-	case 4 ... 7:
+	case 33 ... 64:
 		idx = 2;
 		break;
-	case 2 ... 3:
+	case 9 ... 32:
 		idx = 1;
 		fio_fallthrough;
-	case 1:
+	case 1 ... 8:
 		break;
 	}
 
