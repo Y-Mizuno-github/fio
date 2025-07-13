@@ -297,11 +297,13 @@ struct thread_options {
 
 	unsigned int write_bw_log;
 	unsigned int write_lat_log;
+	unsigned int write_iodepth_log;
 	unsigned int write_iops_log;
 	unsigned int write_hist_log;
 
 	char *bw_log_file;
 	char *lat_log_file;
+	char *iodepth_log_file;
 	char *iops_log_file;
 	char *hist_log_file;
 	char *replay_redirect;
@@ -625,11 +627,14 @@ struct thread_options_pack {
 
 	uint32_t write_bw_log;
 	uint32_t write_lat_log;
+	uint32_t write_iodepth_log;
 	uint32_t write_iops_log;
 	uint32_t write_hist_log;
+	uint32_t pad3;
 
 	uint8_t bw_log_file[FIO_TOP_STR_MAX];
 	uint8_t lat_log_file[FIO_TOP_STR_MAX];
+	uint8_t iodepth_log_file[FIO_TOP_STR_MAX];
 	uint8_t iops_log_file[FIO_TOP_STR_MAX];
 	uint8_t hist_log_file[FIO_TOP_STR_MAX];
 	uint8_t replay_redirect[FIO_TOP_STR_MAX];

@@ -1721,6 +1721,32 @@ static int add_job(struct thread_data *td, const char *jobname, int job_add_num,
 		goto err;
 	}
 
+	if (o->write_iodepth_log) {
+		struct log_params p = {
+			.td = td,
+			.avg_msec = o->log_avg_msec,
+			.hist_msec = o->log_hist_msec,
+			.hist_coarseness = o->log_hist_coarseness,
+			.log_type = IO_LOG_TYPE_IODEPTH,
+			.log_offset = o->log_offset,
+			.log_prio = o->log_prio,
+			.log_issue_time = o->log_issue_time,
+			.log_gz = o->log_gz,
+			.log_gz_store = o->log_gz_store,
+		};
+		const char *pre = make_log_name(o->iodepth_log_file, o->name);
+		const char *suf;
+
+		if (p.log_gz_store)
+			suf = "log.fz";
+		else
+			suf = "log";
+
+		gen_log_name(logname, sizeof(logname), "iodepth", pre,
+				td->thread_number, suf, o->per_job_logs);
+		setup_log(&td->iodepth_log, &p, logname);
+	}
+
 	if (o->write_hist_log) {
 		struct log_params p = {
 			.td = td,

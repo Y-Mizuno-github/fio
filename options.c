@@ -1828,6 +1828,17 @@ static int str_write_lat_log_cb(void *data, const char *str)
 	return 0;
 }
 
+static int str_write_iodepth_log_cb(void *data, const char *str)
+{
+	struct thread_data *td = cb_data_to_td(data);
+
+	if (str)
+		td->o.iodepth_log_file = strdup(str);
+
+	td->o.write_iodepth_log = 1;
+	return 0;
+}
+
 static int str_write_iops_log_cb(void *data, const char *str)
 {
 	struct thread_data *td = cb_data_to_td(data);
@@ -4648,6 +4659,16 @@ struct fio_option fio_options[FIO_MAX_OPTS] = {
 		.help	= "Write log of latency during run",
 		.category = FIO_OPT_C_LOG,
 		.group	= FIO_OPT_G_INVALID,
+	},
+	{
+		.name = "write_iodepth_log",
+		.lname = "Write I/O depth log",
+		.type = FIO_OPT_STR,
+		.off1 = offsetof(struct thread_options, iodepth_log_file),
+		.cb = str_write_iodepth_log_cb,
+		.help = "Write log of I/O depth during run",
+		.category = FIO_OPT_C_LOG,
+		.group = FIO_OPT_G_INVALID,
 	},
 	{
 		.name	= "write_iops_log",

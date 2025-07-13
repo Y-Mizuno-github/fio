@@ -185,6 +185,7 @@ struct thread_stat {
 	struct io_stat lat_stat[DDIR_RWDIR_CNT]; /* total latency */
 	struct io_stat bw_stat[DDIR_RWDIR_CNT]; /* bandwidth stats */
 	struct io_stat iops_stat[DDIR_RWDIR_CNT]; /* IOPS stats */
+	struct io_stat iodepth_stat[DDIR_RWDIR_CNT]; /* IO-depth stats */
 
 	/*
 	 * fio system usage accounting
@@ -375,6 +376,8 @@ extern void add_clat_sample(struct thread_data *, enum fio_ddir,
 extern void add_slat_sample(struct thread_data *, struct io_u *);
 extern void add_agg_sample(union io_sample_data, enum fio_ddir, unsigned long long);
 extern void add_iops_sample(struct thread_data *, struct io_u *,
+				unsigned int);
+extern void add_iodepth_sample(struct thread_data *, struct io_u *,
 				unsigned int);
 extern void add_bw_sample(struct thread_data *, struct io_u *,
 				unsigned int, unsigned long long);

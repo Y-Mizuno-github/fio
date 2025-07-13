@@ -1855,6 +1855,20 @@ static int write_lat_log(struct thread_data *td, int try, bool unit_log)
 	return ret;
 }
 
+static int write_iodepth_log(struct thread_data *td, int try, bool unit_log)
+{
+	int ret;
+
+	if (!unit_log)
+		return 0;
+
+	ret = __write_log(td, td->iodepth_log, try);
+	if (!ret)
+		td->iodepth_log = NULL;
+
+	return ret;
+}
+
 static int write_bandw_log(struct thread_data *td, int try, bool unit_log)
 {
 	int ret;
@@ -1876,8 +1890,9 @@ enum {
 	CLAT_LOG_MASK	= 8,
 	IOPS_LOG_MASK	= 16,
 	CLAT_HIST_LOG_MASK = 32,
+	IODEPTH_LOG_MASK	= 64,
 
-	ALL_LOG_NR	= 6,
+	ALL_LOG_NR	= 7,
 };
 
 struct log_type {
@@ -1909,6 +1924,10 @@ static struct log_type log_types[] = {
 	{
 		.mask	= CLAT_HIST_LOG_MASK,
 		.fn	= write_clat_hist_log,
+	},
+	{
+		.mask	= IODEPTH_LOG_MASK,
+		.fn	= write_iodepth_log,
 	}
 };
 

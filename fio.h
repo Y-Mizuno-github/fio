@@ -211,6 +211,7 @@ struct thread_data {
 	struct io_log *clat_log;
 	struct io_log *clat_hist_log;
 	struct io_log *lat_log;
+	struct io_log *iodepth_log;
 	struct io_log *bw_log;
 	struct io_log *iops_log;
 

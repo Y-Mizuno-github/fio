@@ -39,6 +39,7 @@ static void free_thread_options_to_cpu(struct thread_options *o)
 	free(o->merge_blktrace_file);
 	free(o->bw_log_file);
 	free(o->lat_log_file);
+	free(o->iodepth_log_file);
 	free(o->iops_log_file);
 	free(o->hist_log_file);
 	free(o->replay_redirect);
@@ -86,6 +87,7 @@ int convert_thread_options_to_cpu(struct thread_options *o,
 	string_to_cpu(&o->merge_blktrace_file, top->merge_blktrace_file);
 	string_to_cpu(&o->bw_log_file, top->bw_log_file);
 	string_to_cpu(&o->lat_log_file, top->lat_log_file);
+	string_to_cpu(&o->iodepth_log_file, top->iodepth_log_file);
 	string_to_cpu(&o->iops_log_file, top->iops_log_file);
 	string_to_cpu(&o->hist_log_file, top->hist_log_file);
 	string_to_cpu(&o->replay_redirect, top->replay_redirect);
@@ -342,7 +344,8 @@ int convert_thread_options_to_cpu(struct thread_options *o,
 	o->replay_skip = le32_to_cpu(top->replay_skip);
 	o->per_job_logs = le32_to_cpu(top->per_job_logs);
 	o->write_bw_log = le32_to_cpu(top->write_bw_log);
-	o->write_lat_log = le32_to_cpu(top->write_lat_log);
+	o->write_lat_log = le32_to_cpu(top->write_lat_log); // little endian
+	o->write_iodepth_log = le32_to_cpu(top->write_iodepth_log);
 	o->write_iops_log = le32_to_cpu(top->write_iops_log);
 	o->write_hist_log = le32_to_cpu(top->write_hist_log);
 
@@ -396,6 +399,7 @@ void convert_thread_options_to_net(struct thread_options_pack *top,
 	string_to_net(top->merge_blktrace_file, o->merge_blktrace_file);
 	string_to_net(top->bw_log_file, o->bw_log_file);
 	string_to_net(top->lat_log_file, o->lat_log_file);
+	string_to_net(top->iodepth_log_file, o->iodepth_log_file);
 	string_to_net(top->iops_log_file, o->iops_log_file);
 	string_to_net(top->hist_log_file, o->hist_log_file);
 	string_to_net(top->replay_redirect, o->replay_redirect);
@@ -567,6 +571,7 @@ void convert_thread_options_to_net(struct thread_options_pack *top,
 	top->per_job_logs = cpu_to_le32(o->per_job_logs);
 	top->write_bw_log = cpu_to_le32(o->write_bw_log);
 	top->write_lat_log = cpu_to_le32(o->write_lat_log);
+	top->write_iodepth_log = cpu_to_le32(o->write_iodepth_log);
 	top->write_iops_log = cpu_to_le32(o->write_iops_log);
 	top->write_hist_log = cpu_to_le32(o->write_hist_log);
 

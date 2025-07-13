@@ -2996,6 +2996,7 @@ void regrow_logs(struct thread_data *td)
 	regrow_log(td->clat_log);
 	regrow_log(td->clat_hist_log);
 	regrow_log(td->lat_log);
+	regrow_log(td->iodepth_log);
 	regrow_log(td->bw_log);
 	regrow_log(td->iops_log);
 	td->flags &= ~TD_F_REGROW_LOGS;
@@ -3253,6 +3254,8 @@ void finalize_logs(struct thread_data *td, bool unit_logs)
 		_add_stat_to_log(td->slat_log, elapsed, td->o.log_max);
 	if (td->lat_log && unit_logs)
 		_add_stat_to_log(td->lat_log, elapsed, td->o.log_max);
+	if (td->iodepth_log && unit_logs)
+		_add_stat_to_log(td->iodepth_log, elapsed, td->o.log_max);
 	if (td->bw_log && (unit_logs == per_unit_log(td->bw_log)))
 		_add_stat_to_log(td->bw_log, elapsed, td->o.log_max);
 	if (td->iops_log && (unit_logs == per_unit_log(td->iops_log)))
@@ -3479,6 +3482,28 @@ void add_lat_sample(struct thread_data *td, enum fio_ddir ddir,
 		add_stat_prio_sample(ts->clat_prio[ddir], io_u->clat_prio_index,
 				     nsec);
 	}
+	if (needs_lock)
+		__td_io_u_unlock(td);
+}
+
+void add_iodepth_sample(struct thread_data *td, struct io_u *io_u,
+		     unsigned int bytes)
+{
+	const bool needs_lock = td_async_processing(td);
+	struct thread_stat *ts = &td->ts;
+
+	if (needs_lock)
+		__td_io_u_lock(td);
+
+	add_stat_sample(&ts->iodepth_stat[io_u->ddir], 1);
+
+	if (td->iops_log) {
+		struct log_sample sample = { sample_val(td->cur_depth), io_u->ddir, bytes,
+			io_u->offset, io_u->ioprio, 0 };
+
+		add_log_sample(td, td->iops_log, &sample);
+	}
+
 	if (needs_lock)
 		__td_io_u_unlock(td);
 }
