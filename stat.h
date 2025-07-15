@@ -377,8 +377,7 @@ extern void add_slat_sample(struct thread_data *, struct io_u *);
 extern void add_agg_sample(union io_sample_data, enum fio_ddir, unsigned long long);
 extern void add_iops_sample(struct thread_data *, struct io_u *,
 				unsigned int);
-extern void add_iodepth_sample(struct thread_data *, struct io_u *,
-				unsigned int);
+extern void add_iodepth_sample(struct thread_data *, struct io_u *);
 extern void add_bw_sample(struct thread_data *, struct io_u *,
 				unsigned int, unsigned long long);
 extern void add_sync_clat_sample(struct thread_stat *ts,

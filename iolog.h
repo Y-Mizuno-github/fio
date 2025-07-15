@@ -328,7 +328,8 @@ static inline bool inline_log(struct io_log *log)
 {
 	return log->log_type == IO_LOG_TYPE_LAT ||
 		log->log_type == IO_LOG_TYPE_CLAT ||
-		log->log_type == IO_LOG_TYPE_SLAT;
+		log->log_type == IO_LOG_TYPE_SLAT ||
+		log->log_type == IO_LOG_TYPE_IODEPTH;
 }
 
 static inline void ipo_bytes_align(unsigned int replay_align, struct io_piece *ipo)

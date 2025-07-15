@@ -3486,22 +3486,26 @@ void add_lat_sample(struct thread_data *td, enum fio_ddir ddir,
 		__td_io_u_unlock(td);
 }
 
-void add_iodepth_sample(struct thread_data *td, struct io_u *io_u,
-		     unsigned int bytes)
+void add_iodepth_sample(struct thread_data *td, struct io_u *io_u)
 {
 	const bool needs_lock = td_async_processing(td);
 	struct thread_stat *ts = &td->ts;
+	enum fio_ddir ddir;
+
+	ddir = io_u->ddir;
+	if (!ddir_rw(ddir))
+		return;
 
 	if (needs_lock)
 		__td_io_u_lock(td);
 
 	add_stat_sample(&ts->iodepth_stat[io_u->ddir], 1);
 
-	if (td->iops_log) {
-		struct log_sample sample = { sample_val(td->cur_depth), io_u->ddir, bytes,
+	if (td->iodepth_log) {
+		struct log_sample sample = { sample_val(td->cur_depth), io_u->ddir, 0,
 			io_u->offset, io_u->ioprio, 0 };
 
-		add_log_sample(td, td->iops_log, &sample);
+		add_log_sample(td, td->iodepth_log, &sample);
 	}
 
 	if (needs_lock)

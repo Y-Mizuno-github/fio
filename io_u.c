@@ -2055,9 +2055,7 @@ static void account_io_completion(struct thread_data *td, struct io_u *io_u,
 
 		if (no_reduce && per_unit_log(td->iops_log))
 			add_iops_sample(td, io_u, bytes);
-		
-		if (no_reduce && per_unit_log(td->iodepth_log))
-			add_iodepth_sample(td, io_u, bytes);
+
 	} else if (ddir_sync(idx) && !td->o.disable_clat)
 		add_sync_clat_sample(&td->ts, llnsec);
 
@@ -2319,6 +2317,11 @@ void io_u_queued(struct thread_data *td, struct io_u *io_u)
 		if (td->parent)
 			td = td->parent;
 		add_slat_sample(td, io_u);
+	}
+	if (ramp_time_over(td) && td->o.stats) {
+		if (td->parent)
+			td = td->parent;
+		add_iodepth_sample(td, io_u);
 	}
 }
 
